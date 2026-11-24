@@ -309,10 +309,10 @@ export default function DoctorProfilePage() {
                             type="button"
                             onClick={() => setSelectedSlot(start)}
                             aria-pressed={active}
-                            className={`px-2.5 py-2 rounded-md text-xs font-medium border transition-colors cursor-pointer ${
+                            className={`px-2.5 py-2 rounded-sm text-xs font-medium border transition-colors cursor-pointer ${
                               active
-                                ? 'bg-[#1B4332] text-[#FAF7F2] border-[#1B4332]'
-                                : 'bg-white text-[#1C1917] border-[#D6CFC2] hover:bg-[#F3EFE6]'
+                                ? 'bg-[#183F32] text-[#F7F5F0] border-[#183F32]'
+                                : 'bg-white text-[#171916] border-[#D9D5CA] hover:bg-[#EFECE4]'
                             }`}
                           >
                             {formatDateTime(start)}

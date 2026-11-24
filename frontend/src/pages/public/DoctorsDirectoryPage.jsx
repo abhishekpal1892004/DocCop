@@ -81,20 +81,20 @@ export default function DoctorsDirectoryPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 lg:py-14 space-y-10">
       <div className="max-w-2xl space-y-2">
-        <p className="text-xs uppercase tracking-[0.18em] text-[#57534E] font-medium">
+        <p className="font-mono-label text-[11px] uppercase tracking-[0.2em] text-[#777C68]">
           Verified Directory
         </p>
-        <h1 className="font-editorial text-4xl sm:text-5xl font-normal tracking-[-0.02em] text-[#1C1917]">
+        <h1 className="font-editorial text-4xl sm:text-5xl font-normal tracking-[-0.02em] text-[#171916]">
           Discover verified practitioners.
         </h1>
-        <p className="text-sm sm:text-base text-[#57534E]">
+        <p className="text-sm sm:text-base text-[#444640]">
           Filter by specialty, location, or consultation format. Every listed clinician has completed verification.
         </p>
       </div>
 
       <form
         onSubmit={applyFilters}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end p-5 bg-white border border-[#E6E0D4] rounded-lg"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end p-5 bg-white border border-[#D9D5CA] rounded-sm"
       >
         <Input
           label="Search"
@@ -160,7 +160,7 @@ export default function DoctorsDirectoryPage() {
             Showing {doctors.length} of {meta.total} verified practitioners
           </p>
 
-          <div className="divide-y divide-[#E6E0D4] border-t border-b border-[#E6E0D4] bg-white px-5 rounded-lg">
+          <div className="divide-y divide-[#D9D5CA] border-t border-b border-[#D9D5CA] bg-white px-5 rounded-sm">
             {doctors.map((doc) => {
               const name = doc.fullName || doc.user?.fullName || 'Doctor';
               const specs = Array.isArray(doc.specialties)

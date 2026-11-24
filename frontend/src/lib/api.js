@@ -29,7 +29,7 @@ export async function apiRequest(path, { method = 'GET', body, token, isFormData
     });
   } catch (err) {
     if (err.name === 'AbortError') throw err;
-    throw new ApiClientError('Unable to reach MediBook servers. Check your connection and try again.', {
+    throw new ApiClientError('Unable to reach DocCop servers. Check your connection and try again.', {
       status: 0,
       code: 'NETWORK_ERROR',
     });

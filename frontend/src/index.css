@@ -2,15 +2,14 @@
 
 @layer base {
   :root {
-    --bg-ivory: #faf7f2;
-    --bg-beige: #f3efe6;
+    --bg-porcelain: #f7f5f0;
     --bg-surface: #ffffff;
-    --bg-charcoal: #1c1917;
-    --text-ink: #1c1917;
-    --text-muted: #57534e;
-    --accent-forest: #1b4332;
-    --accent-forest-hover: #143326;
-    --border-stone: #e6e0d4;
+    --bg-ink: #171916;
+    --text-ink: #171916;
+    --text-olive: #777c68;
+    --accent-forest: #183f32;
+    --accent-copper: #a87957;
+    --border-stone: #d9d5ca;
   }
 
   html {
@@ -32,7 +31,7 @@
 
   body {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg-ivory);
+    background-color: var(--bg-porcelain);
     color: var(--text-ink);
     overflow-x: hidden;
   }
@@ -47,13 +46,17 @@
   font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 }
 
+.font-mono-label {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0.75rem;
   z-index: 100;
-  background: #1b4332;
-  color: #faf7f2;
+  background: #183f32;
+  color: #f7f5f0;
   padding: 0.625rem 1rem;
   border-radius: 0.25rem;
   font-weight: 500;

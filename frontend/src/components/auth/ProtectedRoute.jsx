@@ -49,7 +49,7 @@ export function ProtectedRoute({ allowedRoles, children }) {
     return (
       <div className="max-w-2xl mx-auto p-6">
         <Alert variant="error" title={`Account ${user.accountStatus.toLowerCase()}`}>
-          Your MediBook account is currently {user.accountStatus.toLowerCase()}. Please contact support for assistance.
+          Your DocCop account is currently {user.accountStatus.toLowerCase()}. Please contact support for assistance.
         </Alert>
       </div>
     );

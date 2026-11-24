@@ -75,7 +75,7 @@ export function OnboardingPage() {
         description:
           accountType === ROLES.DOCTOR
             ? 'Complete your medical verification application next.'
-            : 'Welcome to MediBook!',
+            : 'Welcome to DocCop!',
       });
       navigate(accountType === ROLES.DOCTOR ? '/doctor/onboarding' : '/patient/profile');
     } catch (err) {
@@ -89,8 +89,8 @@ export function OnboardingPage() {
     <div className="max-w-xl mx-auto py-4">
       <Card>
         <CardHeader
-          title="Complete your MediBook setup"
-          description="Select how you will use MediBook. This determines your workspace and permissions."
+          title="Complete your DocCop setup"
+          description="Select how you will use DocCop. This determines your workspace and permissions."
         />
         <CardBody>
           <form onSubmit={handleSubmit} className="space-y-5">

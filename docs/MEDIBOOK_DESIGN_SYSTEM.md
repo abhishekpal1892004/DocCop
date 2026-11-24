@@ -1,22 +1,20 @@
-# MediBook – Editorial Design System
+# DocCop — Design System (Stage 2)
 
-## 1. Design Tokens (`frontend/src/index.css`)
-- `--bg-ivory: #faf7f2`
-- `--bg-beige: #f3efe6`
+## 1. Color Tokens
+- `--bg-porcelain: #f7f5f0`
 - `--bg-surface: #ffffff`
-- `--bg-charcoal: #1c1917`
-- `--text-ink: #1c1917`
-- `--text-muted: #57534e`
-- `--accent-forest: #1b4332`
-- `--accent-forest-hover: #143326`
-- `--border-stone: #e6e0d4`
+- `--bg-ink: #171916`
+- `--accent-forest: #183f32`
+- `--accent-olive: #777c68`
+- `--accent-copper: #a87957`
+- `--border-stone: #d9d5ca`
 
-## 2. Typography Scale
-- `.font-editorial`: `Cormorant Garamond`, Georgia, serif — used for `h1` hero/page titles and section statements.
-- Body & UI: `Inter`, system sans-serif — used for navigation, tables, forms, and clinical data.
+## 2. Typography Rules
+- `.font-editorial`: `Cormorant Garamond`, Georgia, serif.
+- `.font-mono-label`: `JetBrains Mono`, monospace — `11px`, uppercase, `0.2em` tracking.
+- Body: `Inter`, sans-serif.
 
-## 3. Component Standards (`frontend/src/components/ui/`)
-- **Buttons:** Refined rectangular geometry (`rounded-md`), crisp `1px` borders, clear forest-green primary (`#1B4332`) and charcoal outline variants.
-- **Cards & Tables:** Flat architectural surfaces (`border-stone-200`, `rounded-lg`, minimal shadow), clean `1px` dividers.
-- **Status Badges:** Muted natural tones paired with icons and explicit text labels (never color-only).
-- **Accessibility:** WCAG 2.2 AA contrast, `focus-visible` forest-green outline, skip-to-content link, `prefers-reduced-motion` support.
+## 3. Component & Layout Standards
+- Zero decorative icons beside section headings.
+- Sharp architectural radii (`rounded-sm` / `rounded-md`) and `1px` stone hairlines instead of heavy drop shadows.
+- Strict WCAG 2.2 AA contrast and `prefers-reduced-motion` compliance.

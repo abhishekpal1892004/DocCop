@@ -1,11 +1,11 @@
 {
-  "name": "MediBook Healthcare",
-  "short_name": "MediBook",
+  "name": "DocCop Healthcare",
+  "short_name": "DocCop",
   "description": "Verified doctor appointments, digital prescriptions, and medical records.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#0f766e",
+  "background_color": "#f7f5f0",
+  "theme_color": "#183f32",
   "orientation": "portrait-primary",
   "icons": [
     {

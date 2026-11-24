@@ -93,54 +93,59 @@ export function AppLayout() {
   const showSidebar = isSignedIn && roleNav.length > 0 && isPortalRoute;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917]">
+    <div className="min-h-screen flex flex-col bg-[#F7F5F0] text-[#171916]">
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
 
-      <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-xs border-b border-[#E6E0D4]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-18 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-40 bg-[#F7F5F0]/95 backdrop-blur-xs border-b border-[#D9D5CA]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={mobileMenuOpen}
-              className="lg:hidden p-2 rounded-md text-[#1C1917] hover:bg-[#F3EFE6] transition-colors"
+              className="lg:hidden p-2 rounded-sm text-[#171916] hover:bg-[#EFECE4] transition-colors"
             >
               <Menu className="w-5 h-5" aria-hidden="true" />
             </button>
             <Link
               to="/"
-              className="font-editorial text-2xl sm:text-[1.75rem] font-semibold tracking-tight text-[#1C1917] focus-visible:outline-none"
+              className="font-editorial text-2xl sm:text-[1.75rem] font-semibold tracking-tight text-[#171916] focus-visible:outline-none"
             >
-              MediBook
+              DocCop
             </Link>
           </div>
 
-          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-8 text-sm text-[#44403C]">
-            <Link to="/doctors" className="hover:text-[#1B4332] transition-colors">
+          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-8 text-[13px] tracking-wide text-[#444640]">
+            <NavLink
+              to="/doctors"
+              className={({ isActive }) =>
+                `transition-colors hover:text-[#183F32] ${isActive ? 'text-[#183F32] font-medium underline underline-offset-8' : ''}`
+              }
+            >
               Discover Doctors
-            </Link>
-            <Link to="/#how-it-works" className="hover:text-[#1B4332] transition-colors">
+            </NavLink>
+            <Link to="/#how-it-works" className="hover:text-[#183F32] transition-colors">
               How It Works
             </Link>
-            <Link to="/onboarding" className="hover:text-[#1B4332] transition-colors">
+            <Link to="/onboarding" className="hover:text-[#183F32] transition-colors">
               For Doctors
             </Link>
-            <Link to="/#about" className="hover:text-[#1B4332] transition-colors">
+            <Link to="/#about" className="hover:text-[#183F32] transition-colors">
               About
             </Link>
             <Show when="signed-in">
               {needsOnboarding ? (
-                <Link to="/onboarding" className="font-medium text-[#1B4332] hover:underline underline-offset-4">
+                <Link to="/onboarding" className="font-medium text-[#183F32] hover:underline underline-offset-4">
                   Complete Setup
                 </Link>
               ) : (
                 role && (
                   <Link
                     to={getDashboardPathForRole(role)}
-                    className="font-medium text-[#1B4332] hover:underline underline-offset-4"
+                    className="font-medium text-[#183F32] hover:underline underline-offset-4"
                   >
                     {ROLE_LABELS[role] || 'Dashboard'}
                   </Link>
@@ -151,7 +156,7 @@ export function AppLayout() {
 
           <div className="flex items-center gap-3">
             <Show when="signed-out">
-              <Link to="/sign-in" className="hidden sm:inline-block text-sm text-[#44403C] hover:text-[#1C1917] px-2 py-1">
+              <Link to="/sign-in" className="hidden sm:inline-block text-[13px] text-[#444640] hover:text-[#171916] px-2 py-1">
                 Sign In
               </Link>
               <Link to="/doctors">
@@ -162,7 +167,7 @@ export function AppLayout() {
             </Show>
             <Show when="signed-in">
               {role && (
-                <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium bg-[#F3EFE6] text-[#1B4332] border border-[#D6CFC2]">
+                <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-sm font-mono-label text-[10px] tracking-[0.14em] uppercase bg-white text-[#183F32] border border-[#D9D5CA]">
                   {ROLE_LABELS[role]}
                 </span>
               )}
@@ -175,48 +180,48 @@ export function AppLayout() {
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-50 lg:hidden bg-[#1C1917]/40"
+          className="fixed inset-0 z-50 lg:hidden bg-[#171916]/45"
           onClick={(e) => {
             if (e.target === e.currentTarget) setMobileMenuOpen(false);
           }}
         >
           <aside
             aria-label="Mobile navigation"
-            className="w-76 max-w-[85vw] h-full bg-[#FAF7F2] border-r border-[#E6E0D4] flex flex-col"
+            className="w-76 max-w-[85vw] h-full bg-[#F7F5F0] border-r border-[#D9D5CA] flex flex-col"
           >
-            <div className="h-16 px-5 border-b border-[#E6E0D4] flex items-center justify-between">
-              <span className="font-editorial text-xl font-semibold text-[#1C1917]">MediBook</span>
+            <div className="h-16 px-5 border-b border-[#D9D5CA] flex items-center justify-between">
+              <span className="font-editorial text-xl font-semibold text-[#171916]">DocCop</span>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close navigation menu"
-                className="p-2 rounded-md text-[#57534E] hover:bg-[#F3EFE6]"
+                className="p-2 rounded-sm text-[#777C68] hover:bg-[#EFECE4]"
               >
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
             <nav className="p-4 space-y-1 overflow-y-auto flex-1 text-sm">
-              <Link to="/doctors" className="block px-3 py-2.5 rounded-md text-[#1C1917] hover:bg-[#F3EFE6]">
+              <Link to="/doctors" className="block px-3 py-2.5 rounded-sm text-[#171916] hover:bg-[#EFECE4]">
                 Discover Doctors
               </Link>
-              <Link to="/#how-it-works" className="block px-3 py-2.5 rounded-md text-[#1C1917] hover:bg-[#F3EFE6]">
+              <Link to="/#how-it-works" className="block px-3 py-2.5 rounded-sm text-[#171916] hover:bg-[#EFECE4]">
                 How It Works
               </Link>
-              <Link to="/onboarding" className="block px-3 py-2.5 rounded-md text-[#1C1917] hover:bg-[#F3EFE6]">
+              <Link to="/onboarding" className="block px-3 py-2.5 rounded-sm text-[#171916] hover:bg-[#EFECE4]">
                 For Doctors
               </Link>
-              <Link to="/#about" className="block px-3 py-2.5 rounded-md text-[#1C1917] hover:bg-[#F3EFE6]">
+              <Link to="/#about" className="block px-3 py-2.5 rounded-sm text-[#171916] hover:bg-[#EFECE4]">
                 About
               </Link>
               <Show when="signed-out">
-                <Link to="/sign-in" className="block px-3 py-2.5 rounded-md font-medium text-[#1B4332] hover:bg-[#F3EFE6]">
+                <Link to="/sign-in" className="block px-3 py-2.5 rounded-sm font-medium text-[#183F32] hover:bg-[#EFECE4]">
                   Sign In
                 </Link>
               </Show>
 
               {showSidebar && (
-                <div className="pt-4 mt-4 border-t border-[#E6E0D4] space-y-1">
-                  <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-[#78716C]">
+                <div className="pt-4 mt-4 border-t border-[#D9D5CA] space-y-1">
+                  <p className="px-3 pb-1 font-mono-label text-[10px] uppercase tracking-[0.18em] text-[#777C68]">
                     Workspace
                   </p>
                   {roleNav.map((item) => {
@@ -226,8 +231,8 @@ export function AppLayout() {
                         key={item.to}
                         to={item.to}
                         className={({ isActive }) =>
-                          `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
-                            isActive ? 'bg-[#1B4332] text-[#FAF7F2]' : 'text-[#44403C] hover:bg-[#F3EFE6]'
+                          `flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors ${
+                            isActive ? 'bg-[#183F32] text-[#F7F5F0]' : 'text-[#444640] hover:bg-[#EFECE4]'
                           }`
                         }
                       >
@@ -247,8 +252,11 @@ export function AppLayout() {
         {showSidebar && (
           <aside
             aria-label="Portal navigation"
-            className="hidden lg:block w-64 shrink-0 border-r border-[#E6E0D4] bg-[#F3EFE6]/50 p-5"
+            className="hidden lg:block w-64 shrink-0 border-r border-[#D9D5CA] bg-white/70 p-5"
           >
+            <p className="px-3 pb-3 font-mono-label text-[10px] uppercase tracking-[0.18em] text-[#777C68]">
+              {ROLE_LABELS[role] || 'Portal'}
+            </p>
             <nav className="space-y-1 sticky top-24">
               {roleNav.map((item) => {
                 const Icon = item.icon;
@@ -257,10 +265,10 @@ export function AppLayout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                      `flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-[#1B4332] text-[#FAF7F2]'
-                          : 'text-[#44403C] hover:bg-[#EFEAE0]'
+                          ? 'bg-[#183F32] text-[#F7F5F0]'
+                          : 'text-[#444640] hover:bg-[#EFECE4]'
                       }`
                     }
                   >
@@ -281,28 +289,28 @@ export function AppLayout() {
         </main>
       </div>
 
-      <footer className="border-t border-[#E6E0D4] bg-[#FAF7F2] py-10 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="space-y-1">
-            <span className="font-editorial text-xl font-semibold text-[#1C1917]">MediBook</span>
-            <p className="text-xs text-[#57534E]">
-              Thoughtful doctor discovery, appointments, and digital care records.
+      <footer className="border-t border-[#D9D5CA] bg-[#F7F5F0] py-12 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+          <div className="md:col-span-6 space-y-2">
+            <span className="font-editorial text-2xl font-semibold text-[#171916]">DocCop</span>
+            <p className="text-xs text-[#777C68] max-w-sm leading-relaxed">
+              Private healthcare discovery, verified clinical appointments, and patient-controlled medical records.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-6 text-xs text-[#57534E]">
-            <Link to="/doctors" className="hover:text-[#1B4332] transition-colors">
+          <div className="md:col-span-6 flex flex-wrap md:justify-end items-center gap-6 text-xs text-[#444640]">
+            <Link to="/doctors" className="hover:text-[#183F32] transition-colors">
               Discover Doctors
             </Link>
-            <Link to="/#how-it-works" className="hover:text-[#1B4332] transition-colors">
+            <Link to="/#how-it-works" className="hover:text-[#183F32] transition-colors">
               How It Works
             </Link>
-            <Link to="/onboarding" className="hover:text-[#1B4332] transition-colors">
+            <Link to="/onboarding" className="hover:text-[#183F32] transition-colors">
               For Doctors
             </Link>
-            <Link to="/support" className="hover:text-[#1B4332] transition-colors">
+            <Link to="/support" className="hover:text-[#183F32] transition-colors">
               Support
             </Link>
-            <span>© {new Date().getFullYear()} MediBook</span>
+            <span className="font-mono-label text-[10px] text-[#777C68]">© {new Date().getFullYear()} DOCCOP</span>
           </div>
         </div>
       </footer>

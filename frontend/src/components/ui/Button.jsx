@@ -2,17 +2,17 @@ import { forwardRef } from 'react';
 import { Loader2 } from 'lucide-react';
 
 const VARIANTS = {
-  primary: 'bg-[#1B4332] text-[#FAF7F2] hover:bg-[#143326] focus-visible:ring-[#1B4332]',
-  secondary: 'bg-[#1C1917] text-[#FAF7F2] hover:bg-[#292524] focus-visible:ring-[#1C1917]',
-  outline: 'border border-[#D6CFC2] bg-white text-[#1C1917] hover:bg-[#F3EFE6] focus-visible:ring-[#1B4332]',
-  ghost: 'bg-transparent text-[#44403C] hover:bg-[#F3EFE6] focus-visible:ring-[#1B4332]',
+  primary: 'bg-[#183F32] text-[#F7F5F0] hover:bg-[#123026] focus-visible:ring-[#183F32]',
+  secondary: 'bg-[#171916] text-[#F7F5F0] hover:bg-[#2A2D28] focus-visible:ring-[#171916]',
+  outline: 'border border-[#D9D5CA] bg-white text-[#171916] hover:bg-[#EFECE4] focus-visible:ring-[#183F32]',
+  ghost: 'bg-transparent text-[#444640] hover:bg-[#EFECE4] focus-visible:ring-[#183F32]',
   danger: 'bg-[#991B1B] text-white hover:bg-[#7F1D1D] focus-visible:ring-[#991B1B]',
 };
 
 const SIZES = {
-  sm: 'h-9 px-3.5 text-xs rounded-md gap-1.5',
-  md: 'h-10 px-5 text-sm rounded-md gap-2',
-  lg: 'h-12 px-6 text-sm tracking-wide rounded-md gap-2.5',
+  sm: 'h-9 px-3.5 text-xs rounded-sm gap-1.5',
+  md: 'h-10 px-5 text-sm rounded-sm gap-2',
+  lg: 'h-12 px-6 text-sm tracking-wide rounded-sm gap-2.5',
 };
 
 export const Button = forwardRef(function Button(
