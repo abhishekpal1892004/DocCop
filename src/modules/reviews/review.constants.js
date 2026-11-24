@@ -1,0 +1,6 @@
+export const REVIEW_MODERATION_STATUS = Object.freeze({
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  FLAGGED: 'FLAGGED',
+});

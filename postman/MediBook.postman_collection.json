@@ -1,0 +1,825 @@
+{
+  "info": {
+    "name": "MediBook API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health - Live",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health/live"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('success true', () => pm.expect(pm.response.json().success).to.eql(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health - Ready",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health/ready"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 when DB up (503 when down)', () => pm.expect([200, 503]).to.include(pm.response.code));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown route (404)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/does-not-exist"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('404', () => pm.response.to.have.status(404));",
+              "pm.test('code ROUTE_NOT_FOUND', () => pm.expect(pm.response.json().code).to.eql('ROUTE_NOT_FOUND'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Onboard as PATIENT",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/users/onboard",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountType\": \"PATIENT\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Onboard as DOCTOR",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/users/onboard",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountType\": \"DOCTOR\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Onboard as ADMIN (expect 400)",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/users/onboard",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountType\": \"ADMIN\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get me",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": "{{baseUrl}}/users/me"
+          }
+        },
+        {
+          "name": "Update me",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/users/me",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Asha\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update role (expect 400)",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/users/me",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"ADMIN\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unauthenticated /users/me (expect 401)",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{baseUrl}}/users/me"
+      }
+    },
+    {
+      "name": "Phase 3 - Admin Doctor Review",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/admin/dashboard"
+          }
+        },
+        {
+          "name": "List Doctor Applications",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/admin/doctor-applications?status=SUBMITTED"
+          }
+        },
+        {
+          "name": "Get Doctor Application Details",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/admin/doctor-applications/{{applicationId}}"
+          }
+        },
+        {
+          "name": "Verify Professional Credentials",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/admin/doctor-applications/{{applicationId}}/professional-verification",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFIED\",\n  \"verificationMethod\": \"NMC_REGISTER_LOOKUP\",\n  \"officialSource\": \"NMC Indian Medical Register\",\n  \"remarks\": \"Matched NMC record\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Verify Clinic on Application",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/admin/doctor-applications/{{applicationId}}/clinic-verification",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFIED\",\n  \"remarks\": \"Verified with district health authority\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Approve Doctor Application",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/admin/doctor-applications/{{applicationId}}/approve",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"remarks\": \"All checks passed\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Audit Logs",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/admin/audit-logs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 3 - Verified Doctors",
+      "item": [
+        {
+          "name": "Search Verified Doctors",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/doctors?city=Lucknow&specialization=Cardiology"
+          }
+        },
+        {
+          "name": "Get Verified Doctor By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/doctors/{{doctorId}}"
+          }
+        },
+        {
+          "name": "Get My Verified Doctor Profile",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/doctors/me"
+          }
+        },
+        {
+          "name": "Update My Practice Profile",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/doctors/me",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consultationFee\": 700,\n  \"bio\": \"Senior Cardiologist\",\n  \"languages\": [\"English\", \"Hindi\"],\n  \"isAcceptingPatients\": true\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 5 - Calendly & Appointments",
+      "item": [
+        {
+          "name": "Connect Calendly (Get OAuth URL)",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/integrations/calendly/connect"
+          }
+        },
+        {
+          "name": "Get Calendly Status",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/integrations/calendly/status"
+          }
+        },
+        {
+          "name": "Get Doctor Availability",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/doctors/{{doctorId}}/availability?appointmentTypeId={{appointmentTypeId}}&startDate=2026-12-01T00:00:00Z&endDate=2026-12-15T00:00:00Z&timezone=Asia/Kolkata"
+          }
+        },
+        {
+          "name": "Book Appointment",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "booking-0001" }
+            ],
+            "url": "{{baseUrl}}/appointments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": \"{{doctorId}}\",\n  \"appointmentTypeId\": \"{{appointmentTypeId}}\",\n  \"startTime\": \"2026-12-10T04:30:00.000Z\",\n  \"timezone\": \"Asia/Kolkata\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My Appointments (Patient)",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/appointments/my?tab=upcoming"
+          }
+        },
+        {
+          "name": "Get Doctor Appointments",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/doctor/appointments?tab=upcoming"
+          }
+        },
+        {
+          "name": "Cancel Appointment",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/appointments/{{appointmentId}}/cancel",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Unable to attend\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Start Reschedule Appointment",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/appointments/{{appointmentId}}/reschedule"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 6 - Notifications",
+      "item": [
+        {
+          "name": "Get Notification Preferences",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/notifications/preferences"
+          }
+        },
+        {
+          "name": "Update Notification Preferences",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/notifications/preferences",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"+919876543210\",\n  \"preferredChannel\": \"BOTH\",\n  \"sms\": {\n    \"enabled\": true,\n    \"optedIn\": true,\n    \"consentSource\": \"MEDIBOOK_SETTINGS\"\n  },\n  \"whatsapp\": {\n    \"enabled\": true,\n    \"optedIn\": true,\n    \"consentSource\": \"MEDIBOOK_SETTINGS\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My In-App Notifications",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/notifications/my"
+          }
+        },
+        {
+          "name": "Mark Notification As Read",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/notifications/{{notificationId}}/read"
+          }
+        },
+        {
+          "name": "Mark All Notifications As Read",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/notifications/read-all"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 7 - Records, Prescriptions & Analytics",
+      "item": [
+        {
+          "name": "Get My Medical Records",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/medical-records/my"
+          }
+        },
+        {
+          "name": "Create Prescription Draft",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/prescriptions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointmentId\": \"{{appointmentId}}\",\n  \"diagnosis\": \"Seasonal Viral Fever\",\n  \"medicines\": [\n    {\n      \"medicineName\": \"Paracetamol\",\n      \"strength\": \"500mg\",\n      \"dose\": \"1 tablet\",\n      \"frequency\": \"TID\",\n      \"duration\": \"3 days\"\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Issue Prescription",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/prescriptions/{{prescriptionId}}/issue"
+          }
+        },
+        {
+          "name": "Download Prescription PDF",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/prescriptions/{{prescriptionId}}/pdf"
+          }
+        },
+        {
+          "name": "Admin Analytics Overview",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/admin/analytics/overview"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 8 - Payments, Video, Reviews & Queue",
+      "item": [
+        {
+          "name": "Create Razorpay Order",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/payments/create-order",
+            "body": { "mode": "raw", "raw": "{\n  \"appointmentId\": \"{{appointmentId}}\"\n}" }
+          }
+        },
+        {
+          "name": "Get Agora Consultation Token",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/video-consultations/{{appointmentId}}/token",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telemedicineConsentAccepted\": true,\n  \"emergencyNoticeAcknowledged\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Doctor Reviews",
+          "request": { "method": "GET", "url": "{{baseUrl}}/doctors/{{doctorId}}/reviews" }
+        },
+        {
+          "name": "Open Doctor Queue Session",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/doctor/queues",
+            "body": { "mode": "raw", "raw": "{\n  \"averageConsultationMinutes\": 15\n}" }
+          }
+        },
+        {
+          "name": "Patient Queue Check-In",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/queues/check-in",
+            "body": { "mode": "raw", "raw": "{\n  \"appointmentId\": \"{{appointmentId}}\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 10 - Multi-Clinic, Staff, Waitlist, Follow-ups & Support",
+      "item": [
+        {
+          "name": "Create Organization",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/organizations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Apollo Care Network\",\n  \"type\": \"CLINIC_CHAIN\",\n  \"contactEmail\": \"ops@apollocare.example\",\n  \"contactPhone\": \"+919876543210\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Invite Clinic Staff",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/clinics/{{clinicId}}/staff/invite",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"receptionist@clinic.example\",\n  \"role\": \"RECEPTIONIST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Join Appointment Waitlist",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/waitlist",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": \"{{doctorId}}\",\n  \"appointmentTypeId\": \"{{appointmentTypeId}}\",\n  \"preferredStartDate\": \"2026-12-10T00:00:00.000Z\",\n  \"preferredEndDate\": \"2026-12-15T00:00:00.000Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Follow-Up Recommendation (Doctor)",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/follow-ups",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointmentId\": \"{{appointmentId}}\",\n  \"recommendedDate\": \"2026-12-20T09:00:00.000Z\",\n  \"reason\": \"Review blood pressure\",\n  \"followUpType\": \"POST_CONSULTATION\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Support Ticket",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/support/tickets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"PAYMENT\",\n  \"priority\": \"HIGH\",\n  \"subject\": \"Refund status inquiry\",\n  \"description\": \"Please check refund for cancelled appointment.\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 11 - ABDM, ABHA, HPR/HFR, FHIR R4, HIP & HIU",
+      "item": [
+        {
+          "name": "Get ABHA Linking Status",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/abdm/abha/status"
+          }
+        },
+        {
+          "name": "Convert Prescription to FHIR R4 Bundle",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/interoperability/fhir/convert",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recordSourceType\": \"PRESCRIPTION\",\n  \"recordId\": \"{{prescriptionId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Initiate HIU Consent Request",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/abdm/hiu/consent-request",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"purpose\": \"Care management\",\n  \"recordTypes\": [\"Prescription\", \"DiagnosticReport\"],\n  \"dateRange\": {\n    \"from\": \"2026-01-01T00:00:00.000Z\",\n    \"to\": \"2026-11-01T00:00:00.000Z\"\n  },\n  \"expiresAt\": \"2027-01-01T00:00:00.000Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Admin ABDM Integration Dashboard",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/abdm/admin/dashboard"
+          }
+        }
+      ]
+    }
+  ]
+}

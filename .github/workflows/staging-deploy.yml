@@ -1,0 +1,40 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - name: Install & test before staging deploy
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://127.0.0.1:27017/medibook_ci
+        run: npm ci && node --test
+
+      - name: Build Docker image
+        run: docker build -t medibook-api:staging-${{ github.sha }} .
+
+      - name: Deploy & Smoke Check (requires STAGING_DEPLOY_WEBHOOK & STAGING_HEALTH_URL secrets)
+        env:
+          STAGING_HEALTH_URL: ${{ secrets.STAGING_HEALTH_URL }}
+        run: |
+          if [ -z "$STAGING_HEALTH_URL" ]; then
+            echo "STAGING_HEALTH_URL not configured; skipping live staging deploy."
+            exit 0
+          fi
+          curl -fsS "$STAGING_HEALTH_URL/api/v1/health/ready"

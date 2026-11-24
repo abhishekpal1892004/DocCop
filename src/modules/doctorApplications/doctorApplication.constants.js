@@ -1,0 +1,41 @@
+export const APPLICATION_STATUS = Object.freeze({
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  NEEDS_INFORMATION: 'NEEDS_INFORMATION',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED',
+});
+
+/** Statuses in which the doctor may edit. NEEDS_INFORMATION is the admin-requested correction path. */
+export const EDITABLE_STATUSES = Object.freeze([APPLICATION_STATUS.DRAFT, APPLICATION_STATUS.NEEDS_INFORMATION]);
+/** Re-submitting in these statuses is an idempotent no-op. */
+export const IN_REVIEW_STATUSES = Object.freeze([APPLICATION_STATUS.SUBMITTED, APPLICATION_STATUS.UNDER_REVIEW]);
+
+export const REVIEW_ACTIONS = Object.freeze({
+  START_REVIEW: 'START_REVIEW',
+  REQUEST_INFO: 'REQUEST_INFO',
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT',
+});
+
+export const NMC_VERIFICATION_STATUS = Object.freeze({
+  NOT_CHECKED: 'NOT_CHECKED',
+  LOOKUP_COMPLETED: 'LOOKUP_COMPLETED',
+  NO_MATCH: 'NO_MATCH',
+  PROVIDER_UNAVAILABLE: 'PROVIDER_UNAVAILABLE',
+  MANUAL_REVIEW_REQUIRED: 'MANUAL_REVIEW_REQUIRED',
+});
+
+export const MEDICAL_SYSTEMS = Object.freeze(['MODERN_MEDICINE', 'AYURVEDA', 'HOMEOPATHY', 'UNANI', 'SIDDHA', 'OTHER']);
+export const CLINIC_TYPES = Object.freeze(['CLINIC', 'HOSPITAL', 'POLYCLINIC', 'DIAGNOSTIC_CENTRE', 'OTHER']);
+/** OWNER: runs the clinic. ASSOCIATED: works at an already-registered clinic. */
+export const CLINIC_RELATIONSHIPS = Object.freeze(['OWNER', 'ASSOCIATED']);
+
+export const GST_VERIFICATION_STATUS = Object.freeze({
+  NOT_PROVIDED: 'NOT_PROVIDED',
+  FORMAT_VALID_UNVERIFIED: 'FORMAT_VALID_UNVERIFIED',
+});
+
+export const PINCODE_REGEX = /^[1-9]\d{5}$/;

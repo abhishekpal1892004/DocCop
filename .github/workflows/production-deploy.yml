@@ -1,0 +1,43 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Git tag or SHA to deploy'
+        required: true
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - name: Install & run full test suite
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://127.0.0.1:27017/medibook_ci
+        run: npm ci && node --test
+
+      - name: Build production Docker image
+        run: docker build -t medibook-api:${{ github.sha }} .
+
+      - name: Post-deploy health verification (requires PROD_HEALTH_URL secret)
+        env:
+          PROD_HEALTH_URL: ${{ secrets.PROD_HEALTH_URL }}
+        run: |
+          if [ -z "$PROD_HEALTH_URL" ]; then
+            echo "PROD_HEALTH_URL not configured; manual release approval & host configuration required."
+            exit 0
+          fi
+          curl -fsS "$PROD_HEALTH_URL/api/v1/health/live"
+          curl -fsS "$PROD_HEALTH_URL/api/v1/health/ready"
